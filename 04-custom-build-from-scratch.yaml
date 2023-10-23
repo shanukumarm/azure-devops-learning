@@ -33,8 +33,8 @@ stages:
             tags: |
               $(tag)
         # Task-2: Copy kube-manifest files to Build Artifact Directory
-        - echo $(System.DefaultWorkingDirectory)
-        - cat $(System.DefaultWorkingDirectory)/manifests/deployment.yaml
+        # - echo $(System.DefaultWorkingDirectory)
+        # - cat $(System.DefaultWorkingDirectory)/manifests/deployment.yaml
         - task: CopyFiles@2
           inputs:
             SourceFolder: '$(System.DefaultWorkingDirectory)/manifests'
