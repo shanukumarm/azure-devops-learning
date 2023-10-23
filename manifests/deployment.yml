@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: appcustomnginxaks 
-          image: shanukumarm.azurecr.io/app/customnginx
+          image: shanukumarm.azurecr.io/app/customnginx:26
           ports:
           - containerPort: 80
