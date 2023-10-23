@@ -1,0 +1,47 @@
+# Stages
+# Stage-1:
+  # Task-1: Build Docker Image and push to Azure Container Registry ACR
+  # Task-2: Copy kube-manifest files to Build Artifact Directory
+  # Task-3: Publish build articats to Azure Pipelines
+# Pipeline Hierarchial Flow: Stages -> Stage -> Jobs -> Job -> Steps -> Task1, Task2, Task3  
+
+
+trigger:
+- main
+  
+variables:
+  agentPoolName:  'local-azure-devops-agent'
+  tag: $(Build.BuildId)
+
+
+stages:
+  - stage: Build
+    displayName: Build Stage
+    jobs:
+      - job: Build
+        displayName: Build Job
+        pool:
+          name: $(agentPoolName)
+        steps:
+        # Task-1: Build Docker Image and push to Azure Container Registry ACR
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'manual-aksdevops-svc'
+            repository: 'customnginx'
+            command: 'buildAndPush'
+            Dockerfile: '**/Dockerfile'
+            tags: |
+              $(tag)
+        # Task-2: Copy kube-manifest files to Build Artifact Directory
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)/manifests'
+            Contents: '**'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+            OverWrite: true
+        # Task-3: Publish build articats to Azure Pipelines
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'manifests'
+            publishLocation: 'Container'
