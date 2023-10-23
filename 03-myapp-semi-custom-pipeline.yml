@@ -38,14 +38,14 @@ stages:
         tags: |
           $(tag)
 ## Publish Artifacts pipeline code in addition to Build and Push          
-    - bash: ls; echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)        
+    # - bash: ls; echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)        
     - bash: ls; echo Before copying Contents in Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory)        
     # Task-2: Copy files (Copy files from a source folder to target folder)
     # Source Directory: $(System.DefaultWorkingDirectory)/kube-manifests
     # Target Directory: $(Build.ArtifactStagingDirectory)
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/kube-manifests'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/manifests'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
         OverWrite: true
